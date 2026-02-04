@@ -20,6 +20,13 @@
             ]
           },
           {
+            "group": "Getting Started",
+            "pages": [
+              "getting-started/whitelist",
+              "getting-started/connecting-wallet"
+            ]
+          },
+          {
             "group": "Screens",
             "pages": [
               "screens/trade",

@@ -1,0 +1,31 @@
+---
+title: Connecting Your Wallet
+---
+
+![Wallet signature request](/images/wallet_signature_request.png)
+
+**What you need**
+An Ethereum-compatible wallet that can sign messages. Common options include `MetaMask`, `Brave Wallet`, and `Phantom` (Ethereum).
+
+**What you are doing**
+You are linking a wallet to MACH1 by proving ownership. This is done the same way most DEXs connect wallets: you select a wallet provider and sign a message. No funds move during this step.
+
+**Step 1: Click Connect**
+Select the **Connect Wallet** action in the app. A wallet picker will appear so you can choose which wallet to use.
+
+**Step 2: Choose your wallet**
+Pick the wallet you want to connect (for example, MetaMask, Brave, or Phantom). The app routes the request to that wallet.
+
+**Step 3: Sign the message**
+Your wallet will open a signature prompt like the image above. This message is a cryptographic proof that you control the wallet address.
+
+**Why this matters**
+Signing a message is how MACH1 verifies ownership without needing your private key. It is a standard DEX-style authentication flow.
+
+**Step 4: Connection complete**
+After you sign, the wallet is fully connected and ready for use. You can now proceed with trading and other actions that require authentication.
+
+**Tips**
+- Make sure the connected wallet matches the one you whitelisted.
+- If the signature window does not appear, check your wallet extension is unlocked and allowed to connect.
+- Declining the signature cancels the connection and you can retry from the Connect Wallet button.
