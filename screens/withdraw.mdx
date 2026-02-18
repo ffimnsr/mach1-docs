@@ -2,16 +2,16 @@
 title: Withdraw USDC
 ---
 
-![Faucet request modal](/images/app.m1.markets_en%20%288%29.png)
+![Withdraw modal](/images/modal-withdraw.png)
 
 **What you are seeing**
-A withdrawal modal for sending `USDC` from the MACH1 account to the Sei network. It sits above the trading view so users can confirm amounts in context.
+The `Withdraw USDC to Sei` modal used to move funds out of the trading account.
 
 **Key regions**
-- Asset selector showing `USDC`.
-- Amount input with total and available balance.
-- Primary `Withdraw` action and a secondary cancel action.
+- Asset selector (shown as `USDC`).
+- Amount input with an `Available` balance helper.
+- Action row with cancel and submit.
 
 **Notable behaviors**
-- The modal validates the requested amount against available balance.
-- The underlying trade screen remains visible but inactive.
+- Withdraw action is disabled until amount validation passes.
+- Availability shown in the modal reflects current account state.

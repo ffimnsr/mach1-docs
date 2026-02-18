@@ -30,15 +30,29 @@
             "group": "Screens",
             "pages": [
               "screens/trade",
+              "screens/screener",
               "screens/swap",
               "screens/portfolio",
-              "screens/leaderboard",
+              "screens/leaderboard"
+            ]
+          },
+          {
+            "group": "Modals",
+            "pages": [
               "screens/language-menu",
               "screens/notification-center",
               "screens/trading-preferences",
               "screens/withdraw",
               "screens/faucet-request",
               "screens/deposit"
+            ]
+          },
+          {
+            "group": "Support & Legal",
+            "pages": [
+              "support",
+              "terms",
+              "privacy-policy"
             ]
           }
         ]
