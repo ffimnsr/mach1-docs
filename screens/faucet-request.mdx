@@ -2,15 +2,41 @@
 title: Request Test Tokens
 ---
 
+If you are using MACH1 on testnet, you will need test USDC before you can trade. The faucet lets you request a free batch of test tokens to get started without using real funds.
+
+> **Testnet only.** The faucet is not available on mainnet. If you are on mainnet, fund your account by [depositing real USDC](/screens/deposit) from your wallet.
+
+## Before you start
+
+- Your wallet must be [connected](/getting-started/connecting-wallet).
+- You must be on the testnet environment.
+
+## How to request test tokens
+
+### Step 1: Open the faucet
+
+In the app, look for the **Request Test Tokens** option. This is typically accessible from the account panel or a settings area when on testnet. The faucet modal will open.
+
 ![Faucet request modal](/images/modal-faucet-request.png)
 
-**What you are seeing**
-The `Request Test Tokens` modal for obtaining testnet funds during development and testing.
+### Step 2: Review the request notice
 
-**Key regions**
-- Faucet info and request cadence notice.
-- Primary `Request` action with cancel and close options.
+The modal shows information about the faucet, including the **request cadence** — how often you are allowed to request tokens. The standard cadence is once every **24 hours**.
 
-**Notable behaviors**
-- Requests are rate-limited (24-hour cadence shown in the modal).
-- This flow is intended for testnet usage.
+If you have already requested tokens within the last 24 hours, the **Request** button will be disabled until the cooldown period expires.
+
+### Step 3: Click Request
+
+Click the **Request** button to claim your test tokens. The faucet will send a batch of test USDC to your connected wallet address.
+
+### Step 4: Confirm the tokens arrived
+
+After a moment, go to the [Portfolio](/screens/portfolio) screen and check the **Balances** tab. Your test USDC balance should now reflect the faucet amount.
+
+Once funded, you can [deposit](/screens/deposit) the test USDC into your trading account and start exploring the trading features.
+
+## Tips
+
+- The faucet is rate-limited to prevent abuse. You can request once per 24-hour window per wallet address.
+- If the Request button remains disabled and you believe you are past the cooldown, try refreshing the page and reconnecting your wallet.
+- Test tokens have no real-world value and cannot be withdrawn to mainnet.

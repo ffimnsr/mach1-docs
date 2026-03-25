@@ -2,18 +2,75 @@
 title: Trade Screen
 ---
 
+The Trade screen is the main workspace on MACH1. From here you can view live market data, analyse price charts, read the order book, and place buy or sell orders across all listed spot and perpetuals markets.
+
 ![Trade screen](/images/screen-trade.png)
 
-**What you are seeing**
-The main trading workspace on `app.m1.markets/en`, centered on a selected spot market with live price data.
+## Understanding the layout
 
-**Key regions**
-- Top navigation for `Trade`, `Screener`, `Swap`, `Portfolio`, and `Leaderboard`.
-- Live market ticker ribbon and market selector.
-- TradingView chart panel with timeframe and drawing controls.
-- Order book and order entry panel with `Market` and `Limit` tabs.
-- Account summary and history tabs (`Balances`, `Positions`, `Open Orders`, and more).
+The screen is divided into several panels:
 
-**Notable behaviors**
-- Order actions are gated by wallet state and available balance.
-- Market stats, chart, and order book update continuously from live feeds.
+| Panel | Location | Purpose |
+|---|---|---|
+| Top navigation | Very top | Switch between Trade, Screener, Swap, Portfolio, Leaderboard |
+| Market selector & ticker | Top bar | Pick the market you want to trade and see live stats |
+| TradingView chart | Centre-left | Candlestick or line chart with drawing tools and timeframes |
+| Order book | Centre-right | Live bid and ask levels with depth |
+| Order entry panel | Right side | Place Market or Limit orders |
+| Account panel | Bottom | Tabs for Balances, Positions, Open Orders, Order History, Trade History, Deposit/Withdrawal History |
+
+## How to select a market
+
+1. Click the **market selector** in the top bar (e.g. `BTC/USDC`).
+2. A list of available pairs will appear. MACH1 lists crypto pairs as well as real-world assets like `SPX/USDC`, `META/USDC`, `TSLA/USDC`, and more.
+3. Click the market you want to trade. The chart, order book, and ticker will all update to that market.
+
+## How to read the chart
+
+- The chart is powered by **TradingView** and supports candle, bar, and line styles.
+- Use the timeframe buttons (1m, 5m, 15m, 1h, 4h, 1D, etc.) to change the candlestick interval.
+- Drawing tools (trend lines, Fibonacci, etc.) are available on the left toolbar of the chart.
+
+## How to place a Market order
+
+A market order fills immediately at the best available price.
+
+1. In the order entry panel, select the **Market** tab.
+2. Choose **Buy** or **Sell**.
+3. Enter the **quantity** you want to trade.
+4. Click **Buy** / **Sell** to submit. Your wallet may prompt you to sign the transaction.
+5. The order will appear in **Open Orders** briefly and then move to **Order History** once filled.
+
+## How to place a Limit order
+
+A limit order lets you set the exact price you want to buy or sell at. It sits in the order book until the market reaches your price.
+
+1. In the order entry panel, select the **Limit** tab.
+2. Choose **Buy** or **Sell**.
+3. Enter your **limit price** and the **quantity**.
+4. Click **Buy** / **Sell** to submit.
+5. Your order appears in the **Open Orders** tab. It will fill automatically when the market price reaches your limit. You can cancel it at any time from the Open Orders tab.
+
+## Reading the order book
+
+- **Red rows** are ask (sell) orders — the prices sellers are willing to accept.
+- **Green rows** are bid (buy) orders — the prices buyers are willing to pay.
+- The spread between the lowest ask and highest bid is the current market spread.
+- Clicking a price row in the order book will auto-fill that price in the limit order entry panel.
+
+## Account panel tabs
+
+| Tab | What it shows |
+|---|---|
+| Balances | Your USDC balance and equity breakdown |
+| Positions | Open perpetuals positions with entry price, mark price, PnL, and liquidation price |
+| Open Orders | All currently active limit orders you can cancel |
+| Order History | All your past orders with status |
+| Trade History | Every fill with exact price and size |
+| Deposit/Withdrawal History | A record of all your deposits and withdrawals |
+
+## Tips
+
+- You need a funded account before placing orders. If the order button is disabled, check your [Balances](/screens/portfolio) or [Deposit](/screens/deposit) first.
+- Your fees tier is based on 14-day volume. Check the [Portfolio](/screens/portfolio) screen to see your current taker/maker fee rates.
+- Use the [Screener](/screens/screener) to quickly find markets with the most activity before switching to the Trade view.

@@ -1,17 +1,42 @@
 ---
-title: Leaderboard Screen
+title: Leaderboard
 ---
+
+The Leaderboard ranks all traders on MACH1 by performance. Use it to benchmark your results against other users, discover top traders, and track your own ranking over time.
 
 ![Leaderboard screen](/images/screen-leaderboard.png)
 
-**What you are seeing**
-The leaderboard route (`/en/leaderboard`) ranking wallets by selected performance metrics.
+## How to open the Leaderboard
 
-**Key regions**
-- Ranking table with address and metric columns.
-- Controls for search, pagination, and result sizing.
-- Performance context labels to clarify the ranking window.
+Click **Leaderboard** in the top navigation bar.
 
-**Notable behaviors**
-- Sorting changes ranking order directly in the table.
-- Wallet rows provide quick discovery for top-performing accounts.
+## Reading the leaderboard table
+
+Each row represents one wallet address and shows performance metrics for the current ranking period. Typical columns include:
+
+| Column | What it shows |
+|---|---|
+| Rank | Ordinal position from 1st upwards |
+| Address | The trader’s wallet address (abbreviated) |
+| PnL | Profit and loss for the ranking period |
+| Volume | Total notional volume traded |
+| Win Rate | Percentage of trades that were profitable |
+
+## Sorting and filtering
+
+- Click any column header to sort by that metric.
+- Use the **search** bar to find a specific wallet address by pasting it in.
+- Use the **pagination controls** at the bottom to navigate through all ranked wallets.
+- Use the **results-per-page** selector to show more or fewer rows at once.
+
+## Finding your own rank
+
+1. Copy your wallet address from the top navigation bar.
+2. Paste it into the leaderboard search bar.
+3. Your row will appear with your current rank and statistics.
+
+## Tips
+
+- Rankings are calculated over a specific window (the active competition period). Check the label above the table for the current window dates.
+- Leaderboard positions update periodically as new trades are settled — your rank may shift throughout the day.
+- Looking at top-ranked wallets can give insight into which markets are generating the most activity.

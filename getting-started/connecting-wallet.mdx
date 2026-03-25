@@ -2,30 +2,52 @@
 title: Connecting Your Wallet
 ---
 
+Once your wallet has been approved on the [whitelist](/getting-started/whitelist), you can connect it to MACH1 Markets. This gives the app permission to read your address and prompt you to sign transactions — no funds move during the connection itself.
+
+## What you will need
+
+- A whitelisted Ethereum-compatible wallet. Supported wallets include `MetaMask`, `Brave Wallet`, and `Phantom` (Ethereum mode).
+- Your wallet browser extension installed and unlocked.
+
+## Step 1: Open the app
+
+Go to [app.m1.markets](https://app.m1.markets/en). You will see the main trading screen. In the top-right corner there is a **Connect Wallet** button.
+
+## Step 2: Click Connect Wallet
+
+Click the **Connect Wallet** button. A wallet picker modal will appear listing all the wallet providers the app supports.
+
+## Step 3: Choose your wallet
+
+Select the wallet you used when applying for the whitelist (e.g. MetaMask). The app will send a connection request to your browser extension.
+
+> If you do not see your wallet listed, make sure the extension is installed and enabled in your browser.
+
+## Step 4: Approve the connection in your wallet
+
+Your wallet extension will open and ask you to connect the site. Click **Connect** (or **Approve**) to allow `app.m1.markets` to see your wallet address.
+
+## Step 5: Sign the authentication message
+
 ![Wallet signature request](/images/wallet_signature_request.png)
 
-**What you need**
-An Ethereum-compatible wallet that can sign messages. Common options include `MetaMask`, `Brave Wallet`, and `Phantom` (Ethereum).
+After connecting, MACH1 will ask you to **sign a message** to verify ownership. This is a standard DEX authentication step — it does not cost gas and does not move any funds.
 
-**What you are doing**
-You are linking a wallet to MACH1 by proving ownership. This is done the same way most DEXs connect wallets: you select a wallet provider and sign a message. No funds move during this step.
+The signature prompt will look like the screenshot above. Click **Sign** to complete the process.
 
-**Step 1: Click Connect**
-Select the **Connect Wallet** action in the app. A wallet picker will appear so you can choose which wallet to use.
+## Step 6: You are in
 
-**Step 2: Choose your wallet**
-Pick the wallet you want to connect (for example, MetaMask, Brave, or Phantom). The app routes the request to that wallet.
+Once signed, your wallet address will appear in the top navigation bar and the app will unlock trading, deposits, and account features for your address.
 
-**Step 3: Sign the message**
-Your wallet will open a signature prompt like the image above. This message is a cryptographic proof that you control the wallet address.
+## Troubleshooting
 
-**Why this matters**
-Signing a message is how MACH1 verifies ownership without needing your private key. It is a standard DEX-style authentication flow.
+| Problem | What to try |
+|---|---|
+| Signature window does not appear | Make sure your wallet extension is unlocked and the site has permission to connect. |
+| Wrong wallet connected | Disconnect and reconnect, selecting the correct wallet. |
+| "Not whitelisted" error | Confirm you submitted the correct address at `whitelist.0xmonaco.com` and that your application was approved. |
+| Signature was declined | Click **Connect Wallet** again and accept the signature prompt to retry. |
 
-**Step 4: Connection complete**
-After you sign, the wallet is fully connected and ready for use. You can now proceed with trading and other actions that require authentication.
+## Next step
 
-**Tips**
-- Make sure the connected wallet matches the one you whitelisted.
-- If the signature window does not appear, check your wallet extension is unlocked and allowed to connect.
-- Declining the signature cancels the connection and you can retry from the Connect Wallet button.
+With your wallet connected, you are ready to fund your account. Head to **[Deposit USDC](/screens/deposit)** to add funds before trading.

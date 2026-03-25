@@ -2,17 +2,50 @@
 title: Trading Preferences
 ---
 
+The Trading Preferences modal lets you configure the RPC endpoint your session uses for wallet and blockchain connectivity. If the default RPC endpoint is slow or unreachable, you can switch to a community-provided endpoint or enter your own custom one.
+
 ![Trading preferences modal](/images/modal-trading-preferences.png)
 
-**What you are seeing**
-The `Trading Preferences` modal for RPC endpoint configuration used by the trading session.
+## When to change your RPC endpoint
 
-**Key regions**
-- Current mode and network status section.
-- RPC input field for a custom endpoint.
-- Community RPC example shortcuts.
-- Action row with cancel, reset, and save controls.
+- Transactions are timing out or failing to broadcast.
+- The app feels sluggish or shows connection errors.
+- You have a private or premium RPC endpoint you prefer to use.
 
-**Notable behaviors**
-- Endpoint settings are applied to wallet connectivity behavior.
-- Save remains disabled until input is valid and different from current settings.
+## How to open Trading Preferences
+
+Look for the **Settings** icon (gear icon) in the app navigation, typically in the top-right area, and select **Trading Preferences**.
+
+## Understanding the modal
+
+| Section | What it shows |
+|---|---|
+| Current mode | Whether you are on mainnet or testnet |
+| Network status | Indicates if the current RPC connection is healthy |
+| RPC input field | Where you enter a custom RPC endpoint URL |
+| Community RPC shortcuts | Pre-filled example endpoints from community providers |
+| Action row | Cancel, Reset, and Save buttons |
+
+## How to change the RPC endpoint
+
+### Option A: Use a community RPC shortcut
+
+1. Open the Trading Preferences modal.
+2. In the **Community RPC** section, click one of the provided example endpoint links. It will fill the RPC input field automatically.
+3. Click **Save** to apply.
+
+### Option B: Enter a custom RPC endpoint
+
+1. Open the Trading Preferences modal.
+2. Clear the current value in the **RPC input field** and paste your custom endpoint URL.
+3. Click **Save**. The button is only enabled when the input contains a valid URL that differs from the current setting.
+
+### Resetting to the default
+
+If your custom endpoint causes issues, click **Reset** to restore the default RPC endpoint.
+
+## Tips
+
+- A healthy RPC connection is shown with a green status indicator. If red or showing errors, try switching endpoints.
+- Only use RPC endpoints from sources you trust. A malicious RPC could return manipulated data.
+- Click **Cancel** at any time to close the modal without saving changes.

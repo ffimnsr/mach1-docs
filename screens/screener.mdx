@@ -1,17 +1,54 @@
 ---
-title: Screener Screen
+title: Screener
 ---
+
+The Screener gives you a bird’s-eye view of all markets listed on MACH1 in a single table. Use it to spot trending assets, compare price movements, and find trading opportunities — then jump straight into the order book with one click.
 
 ![Screener screen](/images/screen-screener.png)
 
-**What you are seeing**
-The market screener route (`/en/screener`) for scanning instruments and comparing market activity from one table view.
+## How to open the Screener
 
-**Key regions**
-- Search and filter controls at the top of the table.
-- Sortable market columns (for example price, change, and volume fields).
-- Scrollable result set for quickly moving across listed markets.
+Click **Screener** in the top navigation bar, or go to `app.m1.markets/en/screener`.
 
-**Notable behaviors**
-- Sorting and filtering update the visible set without leaving the page.
-- Clicking a market row is the fastest path back to focused trading on that instrument.
+## Understanding the market table
+
+The screener lists every market with the following columns:
+
+| Column | What it shows |
+|---|---|
+| Market | Token pair name and symbol (e.g. `BTC/USDC`) |
+| Price | Current last traded price |
+| 24h Volume | Total notional volume traded in the last 24 hours |
+| 24h Change | Percentage price change over the last 24 hours (green = up, red = down) |
+
+Example markets visible on MACH1 include `BTC/USDC`, `ETH/USDC`, `SOL/USDC`, `SPX/USDC`, `META/USDC`, and `TSLA/USDC`.
+
+## Filtering by category
+
+At the top of the table there are category tabs:
+
+- **CRYPTO** — Cryptocurrency pairs like BTC, ETH, SOL, HYPE.
+- **EQUITIES** — Real-world equity-linked pairs like SPX, META, TSLA, NVDA, AMZN.
+- **COOKING** — Meme and community tokens like FARTCOIN.
+
+Click a category tab to filter the list to that group only. Click the tab again or select a different one to switch.
+
+## Sorting the table
+
+Click any column header to sort the table by that field. Click it again to reverse the sort order. For example:
+- Click **24h Volume** to find the most actively traded markets.
+- Click **24h Change** to see the biggest movers of the day (sort descending for top gainers, ascending for biggest decliners).
+
+## Searching for a specific market
+
+Use the search bar at the top of the table to filter by token name or symbol. Start typing (e.g. `ETH`) and the list will narrow in real time.
+
+## Opening a market to trade
+
+Click any row in the screener table to open that market on the full [Trade screen](/screens/trade). The chart, order book, and order entry panel will all switch to that pair.
+
+## Tips
+
+- Sort by **24h Volume** descending to find the most liquid markets with tighter spreads.
+- Use the **24h Change** sort to quickly spot the biggest gainers and losers of the day.
+- The screener updates live — you do not need to refresh the page to see the latest data.

@@ -2,16 +2,45 @@
 title: Deposit USDC
 ---
 
+Before you can trade on MACH1, you need to deposit USDC into your trading account. Deposits move funds from your connected Sei wallet into the MACH1 exchange account where orders can be placed.
+
+## Before you start
+
+- Your wallet must be [connected](/getting-started/connecting-wallet).
+- You need USDC in your Sei wallet. If you are on testnet and need test funds, use the [Faucet](/screens/faucet-request) first.
+
+## How to deposit
+
+### Step 1: Open the Deposit modal
+
+From the trading screen, click the **Deposit** button. This is typically found in the account panel at the bottom of the trade screen, or in your [Portfolio](/screens/portfolio) page. The **Deposit USDC from Sei** modal will open.
+
 ![Deposit modal](/images/modal-deposit.png)
 
-**What you are seeing**
-The `Deposit USDC from Sei` modal used to move funds into the trading account.
+### Step 2: Select the asset
 
-**Key regions**
-- Asset selector (shown as `USDC`).
-- Amount input with a quick `MAX` shortcut.
-- Action row with cancel and submit.
+The asset selector defaults to **USDC**. MACH1 currently uses USDC as its base collateral, so this will usually remain as-is.
 
-**Notable behaviors**
-- Deposit action is disabled until a valid amount is entered.
-- The modal is scoped to the currently selected network context.
+### Step 3: Enter an amount
+
+Type the amount of USDC you want to deposit in the amount field. You can also click **MAX** to automatically fill in your full available wallet balance.
+
+> Your available USDC balance in your Sei wallet is shown below the input field. Entering more than this will disable the submit button.
+
+### Step 4: Confirm the deposit
+
+Click **Deposit** (the submit button). Your wallet will prompt you to approve the transaction. Once confirmed on-chain, the funds will appear in your trading account balance.
+
+### Step 5: Verify your balance
+
+After the transaction confirms, go to the [Portfolio](/screens/portfolio) screen and check the **Balances** tab to confirm the deposit arrived.
+
+## Tips
+
+- Deposits require an on-chain transaction and will cost a small gas fee in SEI.
+- On-chain confirmations are typically fast on the Sei network, but can occasionally take a few seconds longer.
+- If the Deposit button stays disabled, make sure you have entered a valid amount and have enough USDC in your wallet.
+
+## Next step
+
+Funds are in your account — head to the [Trade screen](/screens/trade) to place your first order.

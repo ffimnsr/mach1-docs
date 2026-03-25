@@ -1,17 +1,65 @@
 ---
-title: Portfolio Screen
+title: Portfolio
 ---
+
+The Portfolio screen is your account dashboard. It shows your overall performance metrics, current balances, open positions, and the full history of your activity on MACH1.
 
 ![Portfolio screen](/images/screen-portfolio.png)
 
-**What you are seeing**
-The portfolio route (`/en/portfolio`) that aggregates balances, positions, and account-level performance views.
+## How to open Portfolio
 
-**Key regions**
-- Portfolio summary section for high-level account metrics.
-- Holdings and activity tables for assets and account events.
-- Utility actions for managing funds and reviewing performance context.
+Click **Portfolio** in the top navigation bar, or go to `app.m1.markets/en/portfolio`.
 
-**Notable behaviors**
-- Data views update with current account and network context.
-- Tables can be used to drill from summary state into specific assets or events.
+## Account summary
+
+At the top of the Portfolio screen you will see your high-level account metrics:
+
+| Metric | What it means |
+|---|---|
+| **14 Day Volume** | Your total notional trading volume over the last 14 days. This determines your fee tier — higher volume = lower fees. |
+| **Fees (Taker / Maker)** | Your current fee rates for taking liquidity (market orders) and making liquidity (limit orders). Click **View Fee Schedule** to see all tiers. |
+| **30D PnL** | Your realised and unrealised profit and loss over the past 30 days. |
+| **Volume** | Total volume across all time or the selected period. |
+| **Max Drawdown** | The largest peak-to-trough decline in your account equity. A useful risk metric. |
+| **Total Equity** | The current total value of your account (spot + perps). |
+| **Spot Account Equity** | The value of your spot holdings only. |
+| **Perps Equity** | The value locked in open perpetuals positions. |
+
+## Account tabs
+
+Below the summary, the account panel has multiple tabs:
+
+### Balances
+Shows all tokens held in your trading account and their current values. Use this to confirm a deposit arrived or to see what is available to trade.
+
+### Positions
+Lists all currently open perpetuals positions, including:
+- Entry price and current mark price
+- Unrealised PnL
+- Liquidation price — the price at which your position would be force-closed
+- Leverage and margin used
+
+From this tab you can also partially or fully close a position.
+
+### Open Orders
+Shows all limit orders that are active in the order book. You can cancel individual orders or all orders at once from here.
+
+### Order History
+A complete history of all orders you have ever placed, with status (filled, cancelled, rejected).
+
+### Trade History
+Every individual fill with the exact price, size, fee, and timestamp.
+
+### Deposit / Withdrawal History
+A log of all your [deposits](/screens/deposit) and [withdrawals](/screens/withdraw).
+
+## Managing funds from Portfolio
+
+- Click **Deposit** to add more USDC to your account (see [Deposit USDC](/screens/deposit)).
+- Click **Withdraw** to move USDC back to your wallet (see [Withdraw USDC](/screens/withdraw)).
+
+## Tips
+
+- Review your **Max Drawdown** and **30D PnL** regularly to keep a realistic picture of your performance.
+- Monitor your **14 Day Volume** as it approaches the next fee tier to time larger trades.
+- If a deposit is not showing in Balances, wait a few seconds and refresh. On-chain confirmations can occasionally be delayed.

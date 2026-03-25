@@ -2,16 +2,59 @@
 title: Swap Screen
 ---
 
+The Swap screen lets you instantly exchange one supported token for another. Unlike placing a trade on the order book, a swap gives you a quoted rate upfront and executes in one step — no order management needed.
+
 ![Swap screen](/images/screen-swap.png)
 
-**What you are seeing**
-The swap interface (`/en/swap`) for exchanging supported assets with a quote-based flow.
+## When to use Swap vs Trade
 
-**Key regions**
-- Input/output asset fields with amount entry.
-- Quote and route details for the current swap path.
-- Execution controls to submit or review the swap.
+| Use Swap when… | Use Trade when… |
+|---|---|
+| You want a simple one-click token exchange | You need a specific limit price |
+| You do not want to deal with the order book | You are managing a larger position with detailed entries |
+| The amount is smaller and slippage is acceptable | You want partial fills or advanced order types |
 
-**Notable behaviors**
-- Quotes refresh as token pair or amount changes.
-- Submission requires a connected wallet and sufficient balance.
+## How to swap tokens
+
+### Step 1: Open the Swap screen
+
+Click **Swap** in the top navigation bar, or go directly to `app.m1.markets/en/swap`.
+
+### Step 2: Select the token you want to pay with (YOU PAY)
+
+1. In the **YOU PAY** field, click the token selector (defaults to `BTC`).
+2. A token search modal opens. You can search by symbol or paste a contract address.
+3. Select your token. Your available balance for that token is shown below the field.
+
+### Step 3: Select the token you want to receive (YOU RECEIVE)
+
+1. In the **YOU RECEIVE** field, click the token selector (defaults to `USDC`).
+2. Search and select the destination token.
+
+### Step 4: Enter the amount
+
+Type the amount in the **YOU PAY** field. The app will calculate and display the estimated amount you will receive based on the live rate.
+
+The info panel below the inputs shows:
+- **Rate** — the current exchange rate between the two tokens (e.g. `1 BTC ~ 71,611 USDC`).
+- **Slippage tolerance** — the maximum price movement you accept before the swap is cancelled (default `0.50%`).
+- **Estimated output** — the amount you should receive after fees.
+- **Quote status** — shows `Ready` when a valid quote is available.
+
+### Step 5: Review the swap route
+
+The **Swap Route** section shows how the trade will be executed:
+- **Route type** — `Direct` means the swap goes straight through a single pool.
+- **Number of hops** — how many pools the route passes through (1 hop = direct).
+
+A direct single-hop route is generally the cheapest and fastest path.
+
+### Step 6: Connect wallet and execute
+
+If your wallet is not connected, click **Connect wallet to swap**. Once connected, the button changes to **Swap**. Click it to execute. Your wallet will prompt you to approve the transaction.
+
+## Tips
+
+- Quotes refresh automatically as the market moves. If the rate changes significantly before you confirm, the quote will update.
+- If you are swapping a large amount, check the slippage tolerance — you may want to reduce it to avoid an unfavourable fill.
+- If no direct route exists between two tokens, the app will route through intermediate pools automatically.

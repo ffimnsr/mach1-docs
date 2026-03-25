@@ -2,16 +2,39 @@
 title: Withdraw USDC
 ---
 
+Withdrawing moves USDC from your MACH1 trading account back to your connected Sei wallet. You can only withdraw funds that are not currently locked as margin in open positions.
+
+## Before you start
+
+- Your wallet must be [connected](/getting-started/connecting-wallet).
+- You must have available (non-margined) USDC in your trading account.
+- Close or reduce any positions that are using the balance you want to withdraw.
+
+## How to withdraw
+
+### Step 1: Open the Withdraw modal
+
+From the [Portfolio](/screens/portfolio) screen or the account panel on the trading screen, click the **Withdraw** button. The **Withdraw USDC to Sei** modal will open.
+
 ![Withdraw modal](/images/modal-withdraw.png)
 
-**What you are seeing**
-The `Withdraw USDC to Sei` modal used to move funds out of the trading account.
+### Step 2: Check your available balance
 
-**Key regions**
-- Asset selector (shown as `USDC`).
-- Amount input with an `Available` balance helper.
-- Action row with cancel and submit.
+The modal shows your **Available** balance — this is the amount you can withdraw right now. It excludes any USDC currently locked as collateral in open positions.
 
-**Notable behaviors**
-- Withdraw action is disabled until amount validation passes.
-- Availability shown in the modal reflects current account state.
+### Step 3: Enter the amount
+
+Type the amount you want to withdraw. You can enter any amount up to and including the displayed available balance.
+
+> If you want to withdraw everything, type the full available balance shown, or use the **MAX** shortcut if present.
+
+### Step 4: Confirm the withdrawal
+
+Click **Withdraw** to submit. Your wallet will prompt you to approve the transaction. Once the transaction is confirmed on-chain, the USDC will appear back in your Sei wallet.
+
+## Tips
+
+- Withdrawals are on-chain transactions and require a small SEI gas fee.
+- You cannot withdraw funds that are currently collateralising an open position. Close the position first, then withdraw.
+- If the Withdraw button is greyed out, check that you have entered a valid amount that does not exceed your available balance.
+- After withdrawing, verify the funds arrived in your wallet by checking your wallet balance or block explorer.

@@ -2,16 +2,57 @@
 title: Notification Center
 ---
 
+The Notification Center lets you control which alerts MACH1 sends to you. You can enable or disable notifications by category, bulk-pause all alerts temporarily, or turn off notifications entirely.
+
 ![Notification center modal](/images/modal-notification-center.png)
 
-**What you are seeing**
-The `Notification Center` modal opened from `Settings`, with alert categories and bulk controls.
+## How to open the Notification Center
 
-**Key regions**
-- Alert delivery summary with `Enable all` and `Pause all` actions.
-- Category toggles such as fills, momentum triggers, portfolio health, and wallet security.
-- Footer actions including global disable and close.
+Click the **Settings** icon in the top-right navigation and select **Notification Center**, or look for the bell icon if present in the navigation bar.
 
-**Notable behaviors**
-- Each category can be toggled independently.
-- The modal is an overlay and keeps the underlying trade screen read-only while open.
+## Understanding the modal
+
+The modal is divided into:
+
+1. **Alert delivery summary** — shows how many categories are currently active and provides two quick actions:
+   - **Enable all** — turns on every notification category at once.
+   - **Pause all** — temporarily mutes all notifications without disabling them permanently.
+
+2. **Category toggles** — individual switches for each notification type.
+
+3. **Footer** — a global disable option and a close button.
+
+## Notification categories
+
+| Category | What triggers it |
+|---|---|
+| **Fills** | When one of your orders is matched and filled |
+| **Momentum triggers** | When a market you are watching hits a significant price movement |
+| **Portfolio health** | Alerts about your overall account risk, margin levels, or drawdown |
+| **Wallet security** | Unusual activity or important events linked to your connected wallet |
+
+## How to manage your notifications
+
+### Enable or disable a specific category
+
+1. Open the Notification Center.
+2. Find the category you want to change.
+3. Click the toggle next to it. Green = enabled, grey = disabled.
+4. Changes apply immediately — there is no separate Save button for individual toggles.
+
+### Pause all notifications temporarily
+
+1. Open the Notification Center.
+2. Click **Pause all**. All categories will be muted until you re-enable them.
+3. To resume, click **Enable all**.
+
+### Turn off all notifications permanently
+
+1. Open the Notification Center.
+2. Click the global **Disable** option in the footer.
+
+## Tips
+
+- The **Fills** category is recommended to stay enabled so you always know when your orders execute.
+- **Portfolio health** alerts can give early warning of approaching liquidation levels— keep these on if you hold perp positions.
+- The modal is an overlay. The trade screen behind it is read-only while the modal is open.
