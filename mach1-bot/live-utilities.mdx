@@ -1,0 +1,218 @@
+---
+title: Live Account Utilities
+---
+
+Use the `live` command group to prepare funds, inspect balances, and manage isolated perps accounts before or during a live run.
+
+## Shared flags
+
+Most `live` commands accept:
+
+| Flag | Meaning |
+|---|---|
+| `-c, --config <file>` | Config file path. Defaults to `mach-one-bot.toml`. |
+| `--env <environment>` | `mainnet`, `staging`, `development`, or `local`. |
+
+Typical usage:
+
+```bash
+npx mach1 live balance --config my-bot.toml --env staging
+```
+
+## Check balances
+
+### Spot and wallet balances
+
+```bash
+npx mach1 live balance --config my-bot.toml --env staging
+```
+
+Extra flag:
+
+| Flag | Meaning |
+|---|---|
+| `--no-ui` | Print logs only instead of the terminal UI. |
+
+### Isolated perps balances and positions
+
+```bash
+npx mach1 live perps --config live-perps.toml --env staging
+```
+
+Use this to inspect leverage, collateral, unrealized PnL, and open positions.
+
+## Margin account management
+
+### List isolated perps margin accounts
+
+```bash
+npx mach1 live margin-account list --config live-perps.toml --env staging
+```
+
+### Create a margin account
+
+```bash
+npx mach1 live margin-account create \
+  --label primary \
+  --collateral-asset USDC \
+  --config live-perps.toml \
+  --env staging
+```
+
+Flags:
+
+| Flag | Meaning |
+|---|---|
+| `--label <label>` | Optional account label. |
+| `--collateral-asset <asset>` | Symbol or asset ID. |
+
+## Faucet and funding
+
+### Mint testnet funds
+
+```bash
+npx mach1 live faucet --config my-bot.toml --env staging
+```
+
+This is for testnet-style environments only.
+
+### Deposit into spot
+
+```bash
+npx mach1 live deposit \
+  --token USDC \
+  --amount 100 \
+  --to spot \
+  --config my-bot.toml \
+  --env staging
+```
+
+### Deposit into isolated perps
+
+```bash
+npx mach1 live deposit \
+  --token USDC \
+  --amount 100 \
+  --to perps \
+  --margin-account-id <margin-account-id> \
+  --config live-perps.toml \
+  --env staging
+```
+
+Flags:
+
+| Flag | Meaning |
+|---|---|
+| `-t, --token <token>` | Token symbol or address. |
+| `-a, --amount <amount>` | Human-readable amount. |
+| `--all` | Deposit all supported wallet balances. |
+| `--to <destination>` | `spot` or `perps`. |
+| `--margin-account-id <id>` | Required when targeting a specific perps account. |
+| `-d, --decimals <decimals>` | Manual token decimals override. |
+
+## Withdrawals
+
+### Withdraw from spot
+
+```bash
+npx mach1 live withdraw \
+  --token USDC \
+  --amount 50 \
+  --from spot \
+  --config my-bot.toml \
+  --env staging
+```
+
+### Withdraw from perps
+
+```bash
+npx mach1 live withdraw \
+  --token USDC \
+  --amount 50 \
+  --from perps \
+  --margin-account-id <margin-account-id> \
+  --config live-perps.toml \
+  --env staging
+```
+
+Flags:
+
+| Flag | Meaning |
+|---|---|
+| `-t, --token <token>` | Token symbol or address. |
+| `-a, --amount <amount>` | Human-readable amount. |
+| `--from <source>` | `spot` or `perps`. |
+| `--margin-account-id <id>` | Required for a specific perps source account. |
+| `-d, --decimals <decimals>` | Manual token decimals override. |
+
+## Collateral transfers
+
+Move balances between spot and isolated perps:
+
+```bash
+npx mach1 live transfer \
+  --direction spot-to-perps \
+  --token USDC \
+  --amount 100 \
+  --margin-account-id <margin-account-id> \
+  --config live-perps.toml \
+  --env staging
+```
+
+```bash
+npx mach1 live transfer \
+  --direction perps-to-spot \
+  --token USDC \
+  --amount 25 \
+  --margin-account-id <margin-account-id> \
+  --config live-perps.toml \
+  --env staging
+```
+
+Flags:
+
+| Flag | Meaning |
+|---|---|
+| `--direction <direction>` | `spot-to-perps` or `perps-to-spot`. |
+| `-t, --token <token>` | Token symbol or address. |
+| `-a, --amount <amount>` | Human-readable amount. |
+| `--margin-account-id <id>` | Target or source isolated margin account. |
+| `-d, --decimals <decimals>` | Manual decimals override. |
+
+## Swap
+
+Swap funds inside the live account:
+
+```bash
+npx mach1 live swap \
+  --input USDC \
+  --output ETH \
+  --amount 100 \
+  --config my-bot.toml \
+  --env staging
+```
+
+Flags:
+
+| Flag | Meaning |
+|---|---|
+| `-i, --input <token>` | Input token symbol or address. |
+| `-o, --output <token>` | Output token symbol or address. |
+| `-a, --amount <amount>` | Human-readable amount. |
+
+## Recommended live sequence
+
+For testnet or staging-style bring-up:
+
+1. `npx mach1 live balance --config my-bot.toml --env staging`
+2. `npx mach1 live faucet --config my-bot.toml --env staging`
+3. `npx mach1 live deposit --token USDC --amount 100 --config my-bot.toml --env staging`
+4. `npx mach1 live balance --config my-bot.toml --env staging`
+5. `npx mach1 run --config my-bot.toml --env staging`
+
+For isolated perps:
+
+1. `npx mach1 live margin-account create --config live-perps.toml --env staging`
+2. `npx mach1 live deposit --token USDC --amount 100 --to perps --margin-account-id <id> --config live-perps.toml --env staging`
+3. `npx mach1 live perps --config live-perps.toml --env staging`
+4. `npx mach1 run --config live-perps.toml --env staging`

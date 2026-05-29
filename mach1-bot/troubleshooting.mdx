@@ -1,0 +1,188 @@
+---
+title: Troubleshooting
+---
+
+This page focuses on errors and edge cases that are visible from the CLI implementation and example scripts.
+
+## Config and startup errors
+
+### `Configuration file not found`
+
+Example:
+
+```bash
+npx mach1 run --config missing.toml
+```
+
+What to check:
+
+- the file path is correct
+- you are running from the expected repo directory
+- the config was created with `npx mach1 init --file ...`
+
+### `Unknown instance`
+
+The `--instance` shortcut only supports:
+
+- `alpha`
+- `beta`
+
+Those currently map to:
+
+- `mach-one-bot.toml`
+- `mach-one-bot-1.toml`
+
+### `Invalid log level`
+
+Allowed values:
+
+- `DEBUG`
+- `INFO`
+- `WARN`
+- `ERROR`
+
+### `Rate limit must be positive`
+
+If you pass `--rate-limit`, make sure it is a positive integer:
+
+```bash
+npx mach1 run --config bot.toml --rate-limit 10
+```
+
+## Strategy and config issues
+
+### Strategy ID not found
+
+Confirm the strategy exists:
+
+```bash
+npx mach1 list-strategies
+npx mach1 strategy builtin.grid
+```
+
+For example IDs like `rsi_strategy_v1`, verify they are registered in your runtime and not just present in example files.
+
+### Dry-run passes but strategy behavior is wrong
+
+`--dry-run` validates config shape, but it does not prove that:
+
+- your chosen strategy is good for current market conditions
+- your risk parameters are appropriate
+- your custom example strategy is actually available in the running registry
+
+Use:
+
+- [Strategy tuning](/mach1-bot/strategies/tuning)
+- `npx mach1 strategy <id>`
+
+## Example script errors
+
+### `PRIVATE_KEY is not set in .env`
+
+The TypeScript examples read `.env` from the SDK repo root and require:
+
+```bash
+PRIVATE_KEY=0x...
+SEI_RPC_URL=https://evm-rpc-testnet.sei-apis.com
+```
+
+### Backtest returns zero trades
+
+The `with-backtest.ts` example expects OHLCV CSV files in:
+
+```bash
+./backtest-data/
+```
+
+If that directory is empty, the example completes but reports zero trades and zeroed metrics.
+
+## Live funding issues
+
+### Faucet request failed
+
+The faucet command needs successful Monaco authentication first. The implementation explicitly errors when the Monaco access token is missing.
+
+What to check:
+
+- your wallet and config can authenticate
+- you are using a testnet-style environment such as `staging`
+- the Monaco API endpoint is reachable
+
+### Deposit failed
+
+Common causes visible from the implementation:
+
+- token decimals could not be determined
+- wallet balance is insufficient
+- `--all` was used with a decimals override
+- native token deposits are adjusted to preserve gas
+- destination `perps` needs a margin account
+
+### Withdraw failed
+
+What to check:
+
+- for spot: your available Monaco profile balance is large enough
+- for perps: `margin_transferable` is large enough
+- the asset ID resolves correctly from the selected token
+
+### Transfer failed
+
+For `live transfer`, the most common CLI-side issues are:
+
+- invalid `--direction`
+- decimals could not be resolved
+- insufficient perps collateral for `perps-to-spot`
+- missing or incorrect margin account ID
+
+## Environment mismatches
+
+### Funds are missing even though you deposited already
+
+The docs and code both imply a strict environment match:
+
+- your deposit exists in the Monaco environment where it was made
+- your bot must use the same `MONACO_ENV`
+
+If you funded through `app.m1.markets`, ensure your CLI run uses the same Monaco environment host.
+
+### Demo works differently than your TOML run
+
+`npx mach1 demo` is a special flow:
+
+- it reads `MODE` from `.env`
+- it targets `sei-testnet`
+- it defaults `MONACO_ENV` to `staging`
+
+A TOML-based `run` may differ because it also depends on your config file and runtime flags.
+
+## UI and supervisor issues
+
+### Terminal UI is not showing
+
+Possible reasons:
+
+- you passed `--no-ui`
+- `MACH_ONE_NO_UI=1` is set
+- you are in supervisor child mode, which forces non-interactive child runs
+
+### Multiple configs behave differently with and without `--no-ui`
+
+This is expected:
+
+- multiple configs without `--no-ui` use the supervisor UI
+- multiple configs with `--no-ui` spawn multiple child runs that print plain logs
+
+See [Multi-Bot Supervisor](/mach1-bot/multi-bot-supervisor).
+
+## Shutdown behavior
+
+The bot supports graceful shutdown on `Ctrl+C` and related signals. If you send repeated signals quickly, the implementation may force termination instead of waiting for a clean stop.
+
+## Recommended debugging workflow
+
+1. validate the config with `--dry-run`
+2. inspect the strategy with `npx mach1 strategy <id>`
+3. run with `--no-ui --log-level DEBUG`
+4. inspect balances with `npx mach1 live balance ...`
+5. verify Monaco environment alignment

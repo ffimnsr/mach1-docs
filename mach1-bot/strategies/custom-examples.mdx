@@ -1,0 +1,105 @@
+---
+title: Custom Strategy Examples
+---
+
+The repo includes example configs for non-built-in strategy IDs. These are useful starting points when users want indicator-driven strategies instead of the built-in DCA, grid, or portfolio flows.
+
+## RSI examples
+
+Files:
+
+- `packages/mach1_bot/example_configs/rsi-strategy-bot.toml`
+- `packages/mach1_bot/example_configs/rsi-conservative-bot.toml`
+- `packages/mach1_bot/example_configs/rsi-aggressive-bot.toml`
+
+Strategy ID:
+
+```toml
+id = "rsi_strategy_v1"
+```
+
+Typical config:
+
+```toml
+[strategy]
+type = "rsi"
+id = "rsi_strategy_v1"
+risk_level = "medium"
+trading_pairs = ["BTC/USDC", "ETH/USDC", "SOL/USDC"]
+
+[strategy.parameters]
+rsiPeriod = 14
+oversoldThreshold = 30
+overboughtThreshold = 70
+positionSize = 0.1
+stopLoss = 0.05
+```
+
+### Conservative RSI
+
+```toml
+rsiPeriod = 21
+oversoldThreshold = 25
+overboughtThreshold = 75
+positionSize = 0.05
+stopLoss = 0.03
+```
+
+### Aggressive RSI
+
+```toml
+rsiPeriod = 10
+oversoldThreshold = 35
+overboughtThreshold = 65
+positionSize = 0.15
+stopLoss = 0.08
+```
+
+Run examples:
+
+```bash
+npx mach1 strategy rsi_strategy_v1
+npx mach1 run --config packages/mach1_bot/example_configs/rsi-conservative-bot.toml
+npx mach1 run --config packages/mach1_bot/example_configs/rsi-aggressive-bot.toml
+```
+
+## Multi-indicator examples
+
+Files:
+
+- `packages/mach1_bot/example_configs/multi-indicator-bot.toml`
+- `packages/mach1_bot/example_configs/multi-indicator-sol-bot.toml`
+- `packages/mach1_bot/example_configs/live-isolated-perps-bot.toml`
+
+Example IDs:
+
+```toml
+id = "multi_indicator_v1"
+id = "isolated_perps_multi_indicator"
+```
+
+Typical parameters:
+
+```toml
+[strategy.parameters]
+rsiPeriod = 5
+macdFast = 3
+macdSlow = 8
+macdSignal = 3
+bbPeriod = 5
+bbStdDev = 1.0
+confluenceThreshold = 1
+```
+
+Run examples:
+
+```bash
+npx mach1 strategy multi_indicator_v1
+npx mach1 run --config packages/mach1_bot/example_configs/multi-indicator-bot.toml
+```
+
+## Important note on examples
+
+Some example files still include a `[backtest]` section. That block is not part of the current canonical TOML schema, so treat those files as strategy examples rather than exact schema references.
+
+For rollout and parameter guidance, continue to [Strategy tuning](/mach1-bot/strategies/tuning).

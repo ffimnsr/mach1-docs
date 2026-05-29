@@ -1,0 +1,88 @@
+---
+title: Grid Strategy
+---
+
+Strategy ID: `builtin.grid`
+
+The grid strategy places buy and sell orders across a predefined price range and is best when you expect volatility inside a band rather than a one-way trend.
+
+## Parameters
+
+| Parameter | Type | Meaning |
+|---|---|---|
+| `pair` | string | Pair to trade. |
+| `lowerBound` | number | Bottom of the trading range. |
+| `upperBound` | number | Top of the trading range. |
+| `gridCount` | number | Number of levels in the grid. |
+| `totalAmount` | number | Total capital allocated to the grid. |
+| `mode` | string | `neutral`, `long`, or `short`. |
+| `rebalanceThreshold` | number | Percent move that triggers rebalance logic. |
+| `takeProfit` | number | Profit target percentage. |
+| `stopLoss` | number | Loss cutoff percentage. |
+| `maxActiveOrders` | number | Cap on concurrent active orders. |
+
+## Example config
+
+```toml
+[strategy]
+type = "grid"
+id = "builtin.grid"
+risk_level = "medium"
+trading_pairs = ["ETH/USDC"]
+
+[strategy.parameters]
+pair = "ETH/USDC"
+lowerBound = 2500
+upperBound = 3500
+gridCount = 10
+totalAmount = 5000
+mode = "neutral"
+rebalanceThreshold = 5
+takeProfit = 20
+stopLoss = -15
+maxActiveOrders = 20
+```
+
+## Run it
+
+```bash
+npx mach1 run --config grid.toml
+```
+
+## Good fits
+
+- sideways markets
+- repeated mean reversion inside a range
+- users who want explicit range bounds
+
+## What to watch for
+
+- breakouts can invalidate the grid range
+- overly dense grids can create order churn
+- bounds that are too tight can force frequent rebalancing
+
+See also [Strategy tuning](/mach1-bot/strategies/tuning).
+
+## Example variations
+
+### Neutral grid
+
+```toml
+mode = "neutral"
+```
+
+### Bullish tilt
+
+```toml
+mode = "long"
+lowerBound = 2800
+upperBound = 3600
+```
+
+### Bearish tilt
+
+```toml
+mode = "short"
+lowerBound = 2200
+upperBound = 3000
+```

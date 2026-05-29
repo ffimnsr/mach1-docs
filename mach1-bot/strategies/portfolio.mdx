@@ -1,0 +1,62 @@
+---
+title: Portfolio Strategy
+---
+
+Strategy ID: `builtin.portfolio`
+
+The portfolio strategy manages target allocations and periodically rebalances when deviations exceed configured thresholds.
+
+## Parameters
+
+| Parameter | Type | Meaning |
+|---|---|---|
+| `allocationTargets` | JSON string | Asset targets that should sum to 100%. |
+| `rebalanceThreshold` | number | Deviation percent that triggers rebalance. |
+| `rebalanceInterval` | number | Hours between rebalance checks. |
+| `maxSlippage` | number | Slippage cap for rebalance trades. |
+| `minTradeSize` | number | Minimum trade size in USD. |
+| `riskTolerance` | number | Strategy aggressiveness from 1 to 10. |
+| `enableAutoRebalance` | boolean | Allow automatic rebalancing. |
+| `correlationThreshold` | number | Optional max correlation tolerance. |
+| `concentrationLimit` | number | Optional max single-asset allocation. |
+
+## Example config
+
+```toml
+[strategy]
+type = "custom"
+id = "builtin.portfolio"
+risk_level = "medium"
+trading_pairs = ["ETH/USDC", "BTC/USDC", "USDC"]
+
+[strategy.parameters]
+allocationTargets = '[{"token":"ETH/USDC","targetPercent":40,"minPercent":30,"maxPercent":50},{"token":"BTC/USDC","targetPercent":30,"minPercent":20,"maxPercent":40},{"token":"USDC","targetPercent":30,"minPercent":20,"maxPercent":40}]'
+rebalanceThreshold = 5
+rebalanceInterval = 24
+maxSlippage = 1.0
+minTradeSize = 50
+riskTolerance = 5
+enableAutoRebalance = true
+correlationThreshold = 0.8
+concentrationLimit = 50
+```
+
+## Run it
+
+```bash
+npx mach1 run --config portfolio.toml
+```
+
+## Notes
+
+- `allocationTargets` is parsed from a JSON string in the built-in schema.
+- target percentages must sum to `100`.
+- this is the best fit when the user wants allocation management instead of directional trading.
+
+## What to watch for
+
+- targets that do not sum to `100` are rejected
+- low rebalance thresholds can overtrade
+- very small accounts may not rebalance cleanly across many assets
+
+See also [Strategy tuning](/mach1-bot/strategies/tuning).

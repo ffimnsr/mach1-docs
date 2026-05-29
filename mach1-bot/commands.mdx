@@ -1,0 +1,180 @@
+---
+title: CLI Commands
+---
+
+This page documents the actual `mach-one-bot` command surface defined in `packages/mach1_bot/src/cli/main.ts` and `src/cli/commands/live-commands.ts`.
+
+## Top-level commands
+
+| Command | Purpose |
+|---|---|
+| `init` | Interactively create a bot config file. |
+| `run` | Run one bot or multiple configs in supervisor mode. |
+| `live` | Live account utilities such as balances, faucet, deposit, withdraw, and perps tools. |
+| `list-strategies` | List registered strategies and filter them. |
+| `strategy <strategyId>` | Show details for one strategy. |
+| `demo` | Run the ETH/USDC smoke test flow using `.env`. |
+
+## `init`
+
+Interactive config scaffolding:
+
+```bash
+npx mach1 init --file my-bot.toml
+```
+
+Flags:
+
+| Flag | Meaning |
+|---|---|
+| `-f, --file <filename>` | Output file name. Defaults to `mach-one-bot.toml`. |
+| `--force` | Overwrite an existing file. |
+
+The prompt collects:
+
+- wallet private key
+- trading mode
+- RPC URL
+- chain ID
+- max position size
+- max daily loss
+- initial balance
+- strategy type
+- risk level
+- optional AI helper provider and API key
+
+## `run`
+
+Main runtime command:
+
+```bash
+npx mach1 run --config my-bot.toml --env staging
+```
+
+Flags:
+
+| Flag | Meaning |
+|---|---|
+| `-c, --config <file...>` | One or more config files. Defaults to `mach-one-bot.toml`. |
+| `--dry-run` | Validate config only. No bot starts. |
+| `--test` | Test mode that auto-exits after 2 minutes. |
+| `--env <environment>` | Monaco environment: `mainnet`, `staging`, `development`, or `local`. |
+| `--client-id <id>` | Override Monaco client ID. |
+| `--rate-limit <rps>` | Request rate limit. Must be positive. |
+| `--log-level <level>` | `DEBUG`, `INFO`, `WARN`, or `ERROR`. |
+| `--log-prefix <prefix>` | Prefix for files under `./logs`. |
+| `--no-ui` | Disable the interactive terminal UI. |
+| `--instance <name>` | Named instance shortcut. Current built-ins: `alpha`, `beta`. |
+
+### Single bot
+
+```bash
+npx mach1 run --config bots/grid.toml --env staging
+```
+
+### Supervisor mode
+
+Passing more than one `--config` starts multiple child runs:
+
+```bash
+npx mach1 run \
+  --config bots/dca.toml \
+  --config bots/rsi.toml \
+  --env staging
+```
+
+### Validate config only
+
+```bash
+npx mach1 run --config bots/dca.toml --dry-run
+```
+
+### Non-interactive logs
+
+```bash
+npx mach1 run --config bots/dca.toml --no-ui --log-level INFO
+```
+
+## `list-strategies`
+
+Browse built-in and custom strategy registrations:
+
+```bash
+npx mach1 list-strategies
+```
+
+Flags:
+
+| Flag | Meaning |
+|---|---|
+| `-c, --category <category>` | Filter by category. |
+| `-t, --tags <tags>` | Comma-separated tags. |
+| `-r, --risk <min,max>` | Numeric risk range, for example `1,5`. |
+| `-a, --author <author>` | Filter by author. |
+| `-d, --dir <directories>` | Comma-separated custom strategy directories. |
+| `--detailed` | Full details for each strategy. |
+| `--by-category` | Group output by category. |
+| `--show-categories` | Print available categories. |
+| `--show-tags` | Print available tags. |
+
+Examples:
+
+```bash
+npx mach1 list-strategies --detailed
+npx mach1 list-strategies --category grid
+npx mach1 list-strategies --tags dca,systematic
+npx mach1 list-strategies --dir ./strategies
+```
+
+## `strategy <strategyId>`
+
+Inspect one strategy:
+
+```bash
+npx mach1 strategy builtin.grid
+npx mach1 strategy rsi_strategy_v1
+```
+
+This is the best way to confirm parameter names before editing `[strategy.parameters]`.
+
+## `demo`
+
+Quick ETH/USDC smoke test:
+
+```bash
+npx mach1 demo
+```
+
+Behavior:
+
+- reads `.env` from the SDK repo root
+- reads `MODE` from `.env`
+- accepts `paper`, `simulation`, or `live`
+- targets `sei-testnet`
+- uses Monaco environment from `MONACO_ENV`, defaulting to `staging`
+
+Use this before writing a full TOML config if you just want to confirm the SDK is wired correctly.
+
+## `live`
+
+The `live` group contains account and funding utilities:
+
+```bash
+npx mach1 live --help
+```
+
+Subcommands:
+
+| Command | Purpose |
+|---|---|
+| `live balance` | Show Monaco account balances and wallet balances. |
+| `live perps` | Show isolated perps account summary and open positions. |
+| `live margin-account list` | List isolated perps margin accounts. |
+| `live margin-account create` | Create an isolated perps margin account. |
+| `live transfer` | Move collateral between spot and perps. |
+| `live faucet` | Mint testnet funds to the Monaco account. |
+| `live deposit` | Deposit wallet funds into spot or perps. |
+| `live withdraw` | Withdraw from spot or perps back to the wallet. |
+| `live swap` | Swap tokens in the live account. |
+
+The detailed flags and examples are documented on [Live account utilities](/mach1-bot/live-utilities).

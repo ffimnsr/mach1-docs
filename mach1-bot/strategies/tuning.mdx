@@ -1,0 +1,207 @@
+---
+title: Strategy Tuning
+---
+
+This page extends the strategy docs with practical tuning guidance, failure modes, and rollout advice.
+
+## General rollout rules
+
+1. start in `simulation`
+2. validate with `--dry-run`
+3. reduce position sizes before increasing signal sensitivity
+4. change one parameter family at a time
+5. only move to `live` after balance and funding checks
+
+## DCA tuning
+
+Best for:
+
+- gradual entries
+- reducing timing risk
+- accumulation rather than active trading
+
+Main levers:
+
+| Parameter | Effect |
+|---|---|
+| `totalAmountUsd` | Increases or decreases total exposure. |
+| `intervalMinutes` | Controls how quickly capital is deployed. |
+| `orderCount` | Controls slice count and average order size. |
+| `priceStrategy` | Switches between market, limit, and TWAP-style behavior. |
+
+Conservative preset:
+
+```toml
+totalAmountUsd = 500
+intervalMinutes = 60
+orderCount = 10
+priceStrategy = "market"
+```
+
+Aggressive preset:
+
+```toml
+totalAmountUsd = 5000
+intervalMinutes = 5
+orderCount = 20
+priceStrategy = "limit"
+limitPriceOffset = -0.25
+```
+
+When DCA fails:
+
+- if intervals are too short, you stop averaging and just rush exposure
+- if `orderCount` is too low, each fill becomes too large
+- if market data is missing, the strategy waits instead of executing
+
+## Grid tuning
+
+Best for:
+
+- range-bound markets
+- repeated oscillation
+- explicit price-band trading
+
+Main levers:
+
+| Parameter | Effect |
+|---|---|
+| `lowerBound`, `upperBound` | Define the active range. |
+| `gridCount` | Controls density of price levels. |
+| `totalAmount` | Controls capital deployed into the range. |
+| `mode` | Biases neutral vs long vs short behavior. |
+| `takeProfit`, `stopLoss` | Hard exit logic for the grid. |
+
+Conservative preset:
+
+```toml
+lowerBound = 2600
+upperBound = 3400
+gridCount = 8
+totalAmount = 2000
+mode = "neutral"
+```
+
+Aggressive preset:
+
+```toml
+lowerBound = 2500
+upperBound = 3500
+gridCount = 20
+totalAmount = 8000
+mode = "long"
+```
+
+When grid fails:
+
+- trending breakouts can make a range assumption wrong
+- too many levels can create noisy order churn
+- bounds that are too tight can force constant rebalance behavior
+
+## Portfolio tuning
+
+Best for:
+
+- allocation management
+- diversified holdings
+- slower rebalance workflows
+
+Main levers:
+
+| Parameter | Effect |
+|---|---|
+| `allocationTargets` | Defines intended portfolio mix. |
+| `rebalanceThreshold` | Smaller values rebalance more often. |
+| `rebalanceInterval` | Sets check cadence. |
+| `minTradeSize` | Filters small rebalance noise. |
+| `riskTolerance` | Governs how aggressive rebalancing should be. |
+
+Conservative preset:
+
+```toml
+rebalanceThreshold = 8
+rebalanceInterval = 24
+minTradeSize = 100
+riskTolerance = 3
+enableAutoRebalance = true
+```
+
+Aggressive preset:
+
+```toml
+rebalanceThreshold = 3
+rebalanceInterval = 4
+minTradeSize = 25
+riskTolerance = 7
+enableAutoRebalance = true
+```
+
+When portfolio fails:
+
+- target percentages that do not sum to 100 are rejected
+- thresholds that are too low can overtrade
+- small accounts with many targets can create rebalance noise
+
+## Stress test tuning
+
+Best for:
+
+- throughput checks
+- exchange-path load testing
+- deterministic replay with a fixed `seed`
+
+Main levers:
+
+| Parameter | Effect |
+|---|---|
+| `maxOrders` | Total emitted order count. |
+| `ordersPerBatch` | Burst size per tick. |
+| `intervalMs` | Batch cadence. |
+| `minOrderUsd`, `maxOrderUsd` | Notional range. |
+| `seed` | Reproducibility. |
+
+When stress test fails:
+
+- balances may be too small for the generated orders
+- missing market price data causes skipped ticks
+- it is not appropriate as a production trading strategy
+
+## RSI and multi-indicator example tuning
+
+For repo example strategies:
+
+- lower `rsiPeriod` increases sensitivity
+- moving `oversoldThreshold` up and `overboughtThreshold` down increases trade frequency
+- lower `confluenceThreshold` makes multi-indicator strategies fire more often
+- tighter Bollinger settings make bands easier to breach
+
+Conservative RSI:
+
+```toml
+rsiPeriod = 21
+oversoldThreshold = 25
+overboughtThreshold = 75
+positionSize = 0.05
+stopLoss = 0.03
+```
+
+Aggressive RSI:
+
+```toml
+rsiPeriod = 10
+oversoldThreshold = 35
+overboughtThreshold = 65
+positionSize = 0.15
+stopLoss = 0.08
+```
+
+## Tuning order of operations
+
+Use this sequence:
+
+1. choose mode and capital limits
+2. choose strategy type
+3. set the main timing or range parameters
+4. reduce position size before widening sensitivity
+5. test in simulation
+6. inspect logs and outcomes before moving live

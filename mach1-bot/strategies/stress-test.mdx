@@ -1,0 +1,58 @@
+---
+title: Stress Test Strategy
+---
+
+Strategy ID: `builtin.stress_test`
+
+This strategy is for throughput and order-flow testing, not normal trading. It emits batches of random buy and sell signals.
+
+## Parameters
+
+| Parameter | Type | Meaning |
+|---|---|---|
+| `pair` | string | Pair to stress test. |
+| `maxOrders` | number | Total orders to attempt. |
+| `ordersPerBatch` | number | Orders emitted per tick. |
+| `intervalMs` | number | Delay between batches. |
+| `minOrderUsd` | number | Smallest generated order. |
+| `maxOrderUsd` | number | Largest generated order. |
+| `seed` | number | Optional deterministic seed. |
+
+## Example config
+
+```toml
+[strategy]
+type = "stress_test"
+id = "builtin.stress_test"
+risk_level = "high"
+trading_pairs = ["BTC/USDC"]
+
+[strategy.parameters]
+pair = "BTC/USDC"
+maxOrders = 1000
+ordersPerBatch = 50
+intervalMs = 500
+minOrderUsd = 1
+maxOrderUsd = 50
+seed = 123456789
+```
+
+## Run it
+
+```bash
+npx mach1 run --config stress.toml --no-ui
+```
+
+## Use cases
+
+- test order submission throughput
+- reproduce seeded stress runs
+- exercise monitoring and logging pipelines
+
+## What to watch for
+
+- it is for load testing, not normal production trading
+- missing price data causes skipped batches
+- balances can cap how many generated orders are actually feasible
+
+See also [Strategy tuning](/mach1-bot/strategies/tuning).

@@ -1,0 +1,94 @@
+---
+title: MACH1 Bot
+---
+
+The MACH1 Bot is the CLI and config-driven trading runtime in `mach-one-sdk/packages/mach1_bot`. It lets users scaffold configs, run one or more bots, inspect strategies, manage live balances, and switch between simulation, backtest, spot, and isolated perps flows.
+
+## Where the bot lives
+
+- CLI package: `mach-one-sdk/packages/mach1_bot`
+- Wrapper binary: `mach-one-sdk/bin/mach1.cjs`
+- Example configs: `mach-one-sdk/packages/mach1_bot/example_configs`
+- Full example config: `mach-one-sdk/mach-one-bot.toml.example`
+
+## How to invoke it
+
+From the `mach-one-sdk` repository root:
+
+```bash
+npx mach1 --help
+npx mach1 run --config mach-one-bot.toml
+```
+
+If you want the package binary directly:
+
+```bash
+mach-one-bot --help
+mach-one-bot run --config mach-one-bot.toml
+```
+
+## What this section covers
+
+- [First bot tutorial](/mach1-bot/first-bot)
+- [CLI commands](/mach1-bot/commands)
+- [TOML configuration](/mach1-bot/configuration)
+- [Full config reference](/mach1-bot/config-reference)
+- [Live account utilities](/mach1-bot/live-utilities)
+- [Multi-bot supervisor](/mach1-bot/multi-bot-supervisor)
+- [Troubleshooting](/mach1-bot/troubleshooting)
+- [Strategy guide](/mach1-bot/strategies)
+
+## Common workflows
+
+### Scaffold a config
+
+```bash
+cd mach-one-sdk
+npx mach1 init --file my-bot.toml
+```
+
+### Validate before running
+
+```bash
+npx mach1 run --config my-bot.toml --dry-run
+```
+
+### Run one bot
+
+```bash
+npx mach1 run --config my-bot.toml --env staging
+```
+
+### Run multiple bots in supervisor mode
+
+```bash
+npx mach1 run --config bots/alpha.toml --config bots/beta.toml --env staging
+```
+
+### Browse available strategies
+
+```bash
+npx mach1 list-strategies
+npx mach1 strategy builtin.dca
+```
+
+## Modes at a glance
+
+| Mode | Purpose |
+|---|---|
+| `simulation` | Live-style execution path without real funds. |
+| `paper` | Accepted alias for `simulation`. |
+| `backtest` | Historical strategy evaluation. |
+| `live` | Real Monaco execution using your configured wallet. |
+
+## Strategy paths
+
+The SDK ships with built-in strategies and also includes example configs for custom strategy IDs such as `rsi_strategy_v1` and `multi_indicator_v1`.
+
+Use these docs next:
+
+1. Start with [TOML configuration](/mach1-bot/configuration).
+2. Use [Full config reference](/mach1-bot/config-reference) for exact keys.
+3. Pick a strategy from [Strategy guide](/mach1-bot/strategies).
+4. Use [Live account utilities](/mach1-bot/live-utilities) before `live` trading.
+5. Use [Troubleshooting](/mach1-bot/troubleshooting) when a run fails.

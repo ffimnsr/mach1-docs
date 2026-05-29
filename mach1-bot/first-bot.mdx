@@ -1,0 +1,161 @@
+---
+title: First Bot Tutorial
+---
+
+This is the shortest reliable path from a fresh checkout to a running MACH1 Bot.
+
+## 1. Install and prepare the SDK repo
+
+From the SDK repo root:
+
+```bash
+git clone https://github.com/M1-Markets/Mach-1-bot.git
+cd Mach-1-bot
+npm install
+```
+
+## 2. Create your environment file
+
+The example scripts expect a `.env` file in the SDK repo root:
+
+```bash
+cp .env.example .env
+```
+
+Fill in at least:
+
+```bash
+PRIVATE_KEY=0x...
+SEI_RPC_URL=https://evm-rpc-testnet.sei-apis.com
+MODE=paper
+MONACO_ENV=staging
+```
+
+Notes:
+
+- `MODE=paper` is the safest starting point.
+- `paper` is accepted by the CLI and normalized to simulation behavior.
+- `MONACO_ENV` should match the environment where you fund your Monaco account later.
+
+## 3. Smoke-test the installation
+
+Run the bundled demo:
+
+```bash
+npx mach1 demo
+```
+
+Expected result:
+
+- in `paper` or `simulation`, the bot submits a simulated ETH/USDC buy
+- no live funds move
+- the command confirms the toolchain is wired correctly
+
+## 4. Scaffold your first config
+
+```bash
+npx mach1 init --file my-first-bot.toml
+```
+
+The prompt will ask for:
+
+- private key
+- mode
+- RPC URL
+- chain ID
+- position and loss limits
+- strategy type
+- risk level
+- optional AI helper settings
+
+## 5. Start with a simple DCA config
+
+If you want an explicit config instead of the interactive scaffold, use this:
+
+```toml
+[general]
+name = "my-first-bot"
+description = "First MACH1 simulation bot"
+
+[trading]
+mode = "simulation"
+base_currency = "USDC"
+initial_balance = 10000
+max_position_size = 1000
+max_daily_loss = 500
+
+[strategy]
+type = "dca"
+id = "builtin.dca"
+risk_level = "medium"
+trading_pairs = ["ETH/USDC"]
+
+[strategy.parameters]
+pair = "ETH/USDC"
+totalAmountUsd = 1000
+intervalMinutes = 15
+orderCount = 10
+priceStrategy = "market"
+limitPriceOffset = -0.1
+maxSlippage = 0.5
+stopOnMarketClose = false
+```
+
+## 6. Validate before running
+
+```bash
+npx mach1 run --config my-first-bot.toml --dry-run
+```
+
+Do this every time you edit the TOML.
+
+## 7. Run the bot in simulation
+
+```bash
+npx mach1 run --config my-first-bot.toml --env staging
+```
+
+What to expect:
+
+- the CLI prints a config summary
+- a terminal UI starts unless you pass `--no-ui`
+- logs are also written under `./logs`
+- stop the process with `Ctrl+C`
+
+## 8. Try the example scripts too
+
+The SDK also ships direct TypeScript examples:
+
+```bash
+npm run example:quickstart
+npm run example:strategy
+npm run example:backtest
+```
+
+Behavior from the source:
+
+- `example:quickstart` does a simulated ETH/USDC buy
+- `example:strategy` runs a simple RSI callback for 30 seconds
+- `example:backtest` needs CSVs under `./backtest-data/`
+
+## 9. Move to live safely
+
+Before switching `trading.mode = "live"`:
+
+1. check balances with `npx mach1 live balance --config my-first-bot.toml --env staging`
+2. request test funds with `npx mach1 live faucet --config my-first-bot.toml --env staging`
+3. deposit collateral with `npx mach1 live deposit --token USDC --amount 100 --config my-first-bot.toml --env staging`
+4. verify funding again with `npx mach1 live balance --config my-first-bot.toml --env staging`
+
+Then run:
+
+```bash
+npx mach1 run --config my-first-bot.toml --env staging
+```
+
+## Next steps
+
+- [TOML configuration](/mach1-bot/configuration)
+- [Full config reference](/mach1-bot/config-reference)
+- [Strategy guide](/mach1-bot/strategies)
+- [Troubleshooting](/mach1-bot/troubleshooting)

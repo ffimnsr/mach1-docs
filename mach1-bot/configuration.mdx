@@ -1,0 +1,274 @@
+---
+title: TOML Configuration
+---
+
+The bot’s canonical config schema is `mach-one-sdk/packages/mach1_bot/schema/toml-config.schema.json`. The fullest reference example in this repo is `mach-one-sdk/mach-one-bot.toml.example`.
+
+If you want every supported key laid out field-by-field, use [Full config reference](/mach1-bot/config-reference).
+
+## Minimal simulation config
+
+```toml
+[general]
+name = "my-bot"
+description = "Simple simulation bot"
+
+[trading]
+mode = "simulation"
+base_currency = "USDC"
+initial_balance = 10000
+max_position_size = 1000
+max_daily_loss = 500
+
+[strategy]
+type = "dca"
+id = "builtin.dca"
+risk_level = "medium"
+trading_pairs = ["ETH/USDC"]
+
+[strategy.parameters]
+pair = "ETH/USDC"
+totalAmountUsd = 1000
+intervalMinutes = 15
+orderCount = 10
+priceStrategy = "market"
+```
+
+## Config sections
+
+### `[general]` or `[bot]`
+
+Optional metadata:
+
+```toml
+[general]
+name = "alpha-bot"
+description = "Primary strategy runner"
+```
+
+### `[wallet]`
+
+Required for `live` mode:
+
+```toml
+[wallet]
+private_key = "0x..."
+```
+
+### `[trading]`
+
+Core runtime settings:
+
+```toml
+[trading]
+mode = "simulation"
+market_mode = "spot"
+base_currency = "USDC"
+initial_balance = 10000
+max_position_size = 1000
+max_daily_loss = 500
+```
+
+Accepted values:
+
+| Key | Notes |
+|---|---|
+| `mode` | `backtest`, `simulation`, `live`, or `paper`. `paper` is normalized to `simulation`. |
+| `market_mode` | `spot` or `isolated_perps`. |
+| `base_currency` | Commonly `USDC`. |
+| `initial_balance` | Used by simulation and backtest flows. |
+| `max_position_size` | Per-position risk cap. |
+| `max_daily_loss` | Daily loss guardrail. |
+
+### `[perps]`
+
+Only for live isolated perps:
+
+```toml
+[perps]
+margin_mode = "isolated"
+leverage = 3
+liquidation_threshold_percent = 12
+```
+
+Current rules from the SDK:
+
+- only `isolated` margin is supported
+- `cross` is rejected
+- `trading.mode` must be `live`
+- `trading.market_mode` must be `isolated_perps`
+
+### `[strategy]`
+
+Strategy selection:
+
+```toml
+[strategy]
+type = "grid"
+id = "builtin.grid"
+risk_level = "medium"
+trading_pairs = ["ETH/USDC"]
+```
+
+Fields:
+
+| Key | Meaning |
+|---|---|
+| `type` | Descriptive strategy type. |
+| `id` | Exact registered strategy ID, when needed. |
+| `risk_level` | `low`, `medium`, or `high`. |
+| `trading_pairs` | Symbols the strategy should monitor. |
+
+### `[strategy.parameters]`
+
+This block is strategy-specific. Built-in examples are covered under [Strategy guide](/mach1-bot/strategies).
+
+### `[network]`
+
+Required for `live` mode:
+
+```toml
+[network]
+rpc_url = "https://evm-rpc-testnet.sei-apis.com"
+chain_id = 1328
+```
+
+### `[ai_helper]`
+
+Optional:
+
+```toml
+[ai_helper]
+enabled = true
+provider = "chatgpt"
+api_key = "replace-me"
+prompt = """
+You are trading assistant.
+Prioritize risk management.
+"""
+```
+
+Supported providers in the schema:
+
+- `gemini`
+- `chatgpt`
+- `claude`
+
+## Running different modes
+
+### Simulation
+
+```toml
+[trading]
+mode = "simulation"
+base_currency = "USDC"
+initial_balance = 10000
+max_position_size = 1000
+max_daily_loss = 500
+```
+
+```bash
+npx mach1 run --config sim.toml
+```
+
+### Backtest
+
+```toml
+[trading]
+mode = "backtest"
+base_currency = "USDC"
+initial_balance = 10000
+max_position_size = 1000
+max_daily_loss = 500
+```
+
+```bash
+npx mach1 run --config backtest.toml
+```
+
+The repo still contains some older examples with a `[backtest]` block, but that block is not part of the current canonical TOML schema.
+
+### Live spot
+
+```toml
+[wallet]
+private_key = "0x..."
+
+[trading]
+mode = "live"
+market_mode = "spot"
+base_currency = "USDC"
+initial_balance = 10000
+max_position_size = 1000
+max_daily_loss = 500
+
+[network]
+rpc_url = "https://evm-rpc-testnet.sei-apis.com"
+chain_id = 1328
+```
+
+```bash
+npx mach1 run --config live-spot.toml --env staging
+```
+
+### Live isolated perps
+
+```toml
+[wallet]
+private_key = "0x..."
+
+[trading]
+mode = "live"
+market_mode = "isolated_perps"
+base_currency = "USDC"
+max_position_size = 1000
+max_daily_loss = 250
+
+[perps]
+margin_mode = "isolated"
+leverage = 3
+liquidation_threshold_percent = 12
+
+[network]
+rpc_url = "https://evm-rpc-testnet.sei-apis.com"
+chain_id = 1328
+```
+
+```bash
+npx mach1 run --config live-perps.toml --env staging
+```
+
+## Validation workflow
+
+Validate every config before a real run:
+
+```bash
+npx mach1 run --config my-bot.toml --dry-run
+```
+
+If you run multiple bots, validate each config first:
+
+```bash
+npx mach1 run --config bots/alpha.toml --dry-run
+npx mach1 run --config bots/beta.toml --dry-run
+```
+
+## Related pages
+
+- [First bot tutorial](/mach1-bot/first-bot)
+- [Full config reference](/mach1-bot/config-reference)
+- [Multi-bot supervisor](/mach1-bot/multi-bot-supervisor)
+- [Troubleshooting](/mach1-bot/troubleshooting)
+
+Validate every config before a real run:
+
+```bash
+npx mach1 run --config my-bot.toml --dry-run
+```
+
+If you run multiple bots, validate each config first:
+
+```bash
+npx mach1 run --config bots/alpha.toml --dry-run
+npx mach1 run --config bots/beta.toml --dry-run
+```

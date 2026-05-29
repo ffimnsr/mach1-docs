@@ -1,0 +1,149 @@
+---
+title: Multi-Bot Supervisor
+---
+
+The `run` command can manage more than one bot at once by passing multiple config files.
+
+## One bot vs many bots
+
+### Single bot
+
+```bash
+npx mach1 run --config bots/alpha.toml --env staging
+```
+
+### Multiple bots
+
+```bash
+npx mach1 run \
+  --config bots/alpha.toml \
+  --config bots/beta.toml \
+  --env staging
+```
+
+## How the CLI behaves
+
+When you pass multiple configs:
+
+- with UI enabled, the CLI starts a supervisor UI
+- with `--no-ui`, the CLI spawns multiple child runs and prints plain logs
+
+Internally, the supervisor uses child processes and sets:
+
+- `MACH_ONE_SUPERVISED=1`
+- `MACH_ONE_NO_UI=1`
+
+for child runs.
+
+## Recommended file layout
+
+```text
+bots/
+  alpha.toml
+  beta.toml
+  grid.toml
+  dca.toml
+```
+
+Keep one strategy per file and make the file name match the bot’s purpose.
+
+## Validate each config first
+
+```bash
+npx mach1 run --config bots/alpha.toml --dry-run
+npx mach1 run --config bots/beta.toml --dry-run
+```
+
+Do not skip this when launching multiple children.
+
+## Logging behavior
+
+Every run writes a log file under:
+
+```bash
+./logs
+```
+
+Useful flag:
+
+```bash
+--log-prefix <prefix>
+```
+
+Example:
+
+```bash
+npx mach1 run \
+  --config bots/alpha.toml \
+  --config bots/beta.toml \
+  --log-prefix live-batch \
+  --env staging
+```
+
+## Using `--no-ui`
+
+Best when:
+
+- running over SSH
+- piping logs
+- using process managers
+- debugging one child’s raw output
+
+Example:
+
+```bash
+npx mach1 run \
+  --config bots/alpha.toml \
+  --config bots/beta.toml \
+  --no-ui \
+  --log-level DEBUG \
+  --env staging
+```
+
+## Named instances
+
+The CLI also supports:
+
+```bash
+npx mach1 run --instance alpha
+npx mach1 run --instance beta
+```
+
+Current built-in mappings from the source:
+
+| Instance | Config file | Log prefix |
+|---|---|---|
+| `alpha` | `mach-one-bot.toml` | `alpha` |
+| `beta` | `mach-one-bot-1.toml` | `beta` |
+
+Use this only if those file names match how you operate locally.
+
+## Practical patterns
+
+### Split by strategy
+
+- `bots/dca.toml`
+- `bots/grid.toml`
+- `bots/portfolio.toml`
+
+### Split by market
+
+- `bots/eth-dca.toml`
+- `bots/btc-grid.toml`
+- `bots/sol-rsi.toml`
+
+### Split by mode
+
+- `bots/sim-grid.toml`
+- `bots/live-spot.toml`
+- `bots/live-perps.toml`
+
+Do not mix live and experimental configs casually in the same launch command.
+
+## Operational advice
+
+1. start with two configs, not ten
+2. give each bot a clear log identity
+3. use `--no-ui` for automation and UI mode for human monitoring
+4. keep environment selection explicit with `--env`
+5. verify each bot’s funding independently before live runs

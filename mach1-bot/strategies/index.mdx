@@ -1,0 +1,53 @@
+---
+title: Strategy Guide
+---
+
+The bot supports both built-in strategy IDs and additional example strategy IDs referenced by example configs in `packages/mach1_bot/example_configs`.
+
+## Built-in strategies
+
+| Strategy ID | Type | Notes |
+|---|---|---|
+| `builtin.dca` | DCA | Systematic recurring buys. |
+| `builtin.grid` | Grid | Range-based buy/sell laddering. |
+| `builtin.portfolio` | Portfolio | Allocation and rebalance logic. |
+| `builtin.stress_test` | Stress | High-throughput order testing. |
+
+## Example custom strategy IDs in the repo
+
+| Strategy ID | Seen in repo | Notes |
+|---|---|---|
+| `rsi_strategy_v1` | `rsi-*.toml` examples | Mean reversion examples. |
+| `multi_indicator_v1` | `multi-indicator-*.toml` examples | RSI + MACD + Bollinger confluence. |
+| `isolated_perps_multi_indicator` | `live-isolated-perps-bot.toml` | Perps-oriented multi-indicator example. |
+
+These custom IDs are example-driven. Confirm they are registered in your runtime before use:
+
+```bash
+npx mach1 list-strategies
+npx mach1 strategy rsi_strategy_v1
+```
+
+## Pick the right strategy
+
+| Goal | Best starting point |
+|---|---|
+| Recurring entries over time | [DCA](/mach1-bot/strategies/dca) |
+| Trading a defined range | [Grid](/mach1-bot/strategies/grid) |
+| Allocating across assets | [Portfolio](/mach1-bot/strategies/portfolio) |
+| Load or throughput testing | [Stress test](/mach1-bot/strategies/stress-test) |
+| Indicator experimentation | [Custom examples](/mach1-bot/strategies/custom-examples) |
+
+## Tuning and operations
+
+After choosing a strategy, continue with:
+
+- [Strategy tuning](/mach1-bot/strategies/tuning)
+- [Troubleshooting](/mach1-bot/troubleshooting)
+
+## Safe rollout path
+
+1. Start in `backtest` or `simulation`.
+2. Validate with `npx mach1 run --config <file> --dry-run`.
+3. Use `npx mach1 list-strategies --detailed` to confirm parameter names.
+4. Move to `live` only after funding and balance checks.

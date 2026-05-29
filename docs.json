@@ -20,6 +20,26 @@
             ]
           },
           {
+            "group": "MACH1 Bot",
+            "pages": [
+              "mach1-bot",
+              "mach1-bot/first-bot",
+              "mach1-bot/commands",
+              "mach1-bot/configuration",
+              "mach1-bot/config-reference",
+              "mach1-bot/live-utilities",
+              "mach1-bot/multi-bot-supervisor",
+              "mach1-bot/troubleshooting",
+              "mach1-bot/strategies",
+              "mach1-bot/strategies/dca",
+              "mach1-bot/strategies/grid",
+              "mach1-bot/strategies/portfolio",
+              "mach1-bot/strategies/stress-test",
+              "mach1-bot/strategies/custom-examples",
+              "mach1-bot/strategies/tuning"
+            ]
+          },
+          {
             "group": "Getting Started",
             "pages": [
               "getting-started/whitelist",

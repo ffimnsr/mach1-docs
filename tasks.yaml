@@ -1,0 +1,9 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ffimnsr/mk-rs/main/docs/schema.json
+
+tasks:
+  dev:
+    commands:
+      - |
+        export PATH="/home/linuxbrew/.linuxbrew/opt/node@24/bin:$PATH"
+        npx -y mint dev
+    description: Run the development server

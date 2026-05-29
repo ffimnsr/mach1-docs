@@ -1,0 +1,251 @@
+---
+title: Config Reference
+---
+
+This page is the schema-style companion to the tutorial material in [TOML configuration](/mach1-bot/configuration).
+
+## Precedence rules
+
+The CLI processes runtime settings in this order:
+
+1. CLI flags
+2. TOML config
+3. environment variables
+4. defaults
+
+Examples:
+
+- `--env` overrides `MONACO_ENV`
+- `--client-id` overrides `MONACO_CLIENT_ID`
+- `--rate-limit` overrides `MONACO_RATE_LIMIT_RPS`
+- `--log-level` overrides `MONACO_LOG_LEVEL`
+
+## Top-level sections
+
+| Section | Required | Notes |
+|---|---|---|
+| `[general]` | No | Optional metadata. |
+| `[bot]` | No | Alias metadata section. |
+| `[wallet]` | Only in `live` | Must include `private_key` for live runs. |
+| `[trading]` | Yes | Required by the canonical schema. |
+| `[perps]` | Only for `live` + `isolated_perps` | Required for isolated perps flows. |
+| `[strategy]` | Yes | Required by the canonical schema. |
+| `[network]` | Only in `live` | Must include `rpc_url` for live runs. |
+| `[ai_helper]` | No | Optional assistant integration. |
+
+## `[general]`
+
+```toml
+[general]
+name = "alpha-bot"
+description = "Primary production runner"
+```
+
+| Key | Type | Required |
+|---|---|---|
+| `name` | string | No |
+| `description` | string | No |
+
+## `[bot]`
+
+Same purpose as `[general]`:
+
+```toml
+[bot]
+name = "alpha-bot"
+description = "Alias metadata section"
+```
+
+## `[wallet]`
+
+```toml
+[wallet]
+private_key = "0x..."
+```
+
+| Key | Type | Required |
+|---|---|---|
+| `private_key` | string | Yes for `live` mode |
+
+## `[trading]`
+
+```toml
+[trading]
+mode = "simulation"
+market_mode = "spot"
+base_currency = "USDC"
+initial_balance = 10000
+max_position_size = 1000
+max_daily_loss = 500
+```
+
+| Key | Type | Required | Allowed values / notes |
+|---|---|---|---|
+| `mode` | string | Yes | `backtest`, `simulation`, `live`, `paper` |
+| `market_mode` | string | No | `spot`, `isolated_perps` |
+| `base_currency` | string | Yes | Usually `USDC` |
+| `initial_balance` | number | Yes | Simulation and backtest capital base |
+| `max_position_size` | number | Yes | Risk cap per position |
+| `max_daily_loss` | number | Yes | Daily loss limit |
+
+Notes:
+
+- `paper` is normalized to `simulation`
+- `market_mode = "isolated_perps"` should only be used with `mode = "live"`
+
+## `[perps]`
+
+```toml
+[perps]
+margin_mode = "isolated"
+leverage = 3
+liquidation_threshold_percent = 12
+```
+
+| Key | Type | Required | Notes |
+|---|---|---|---|
+| `margin_mode` | string | No in schema, but should be set | `isolated` is the supported path |
+| `leverage` | number | Yes for live isolated perps | Must be greater than 0 |
+| `liquidation_threshold_percent` | number | No in schema, but needed in examples | Greater than 0 and less than 100 |
+
+Implementation notes:
+
+- current support is isolated margin only
+- cross margin is rejected by the runtime path
+
+## `[strategy]`
+
+```toml
+[strategy]
+type = "grid"
+id = "builtin.grid"
+risk_level = "medium"
+trading_pairs = ["ETH/USDC"]
+```
+
+| Key | Type | Required | Notes |
+|---|---|---|---|
+| `type` | string | Yes | Human-readable strategy type |
+| `risk_level` | string | Yes | `low`, `medium`, `high` |
+| `id` | string | No | Exact registered strategy ID |
+| `parameters` | object | No | Strategy-specific values |
+| `trading_pairs` | array of strings | No | Symbols to monitor |
+
+## `[strategy.parameters]`
+
+This block depends on the selected strategy. Common patterns in this repo:
+
+### DCA
+
+```toml
+[strategy.parameters]
+pair = "ETH/USDC"
+totalAmountUsd = 1000
+intervalMinutes = 15
+orderCount = 10
+priceStrategy = "market"
+limitPriceOffset = -0.1
+maxSlippage = 0.5
+stopOnMarketClose = false
+```
+
+### Grid
+
+```toml
+[strategy.parameters]
+pair = "ETH/USDC"
+lowerBound = 2500
+upperBound = 3500
+gridCount = 10
+totalAmount = 5000
+mode = "neutral"
+rebalanceThreshold = 5
+takeProfit = 20
+stopLoss = -15
+maxActiveOrders = 20
+```
+
+### Portfolio
+
+```toml
+[strategy.parameters]
+allocationTargets = '[{"token":"ETH/USDC","targetPercent":40},{"token":"BTC/USDC","targetPercent":30},{"token":"USDC","targetPercent":30}]'
+rebalanceThreshold = 5
+rebalanceInterval = 24
+maxSlippage = 1.0
+minTradeSize = 50
+riskTolerance = 5
+enableAutoRebalance = true
+correlationThreshold = 0.8
+concentrationLimit = 50
+```
+
+### Stress test
+
+```toml
+[strategy.parameters]
+pair = "BTC/USDC"
+maxOrders = 1000
+ordersPerBatch = 50
+intervalMs = 500
+minOrderUsd = 1
+maxOrderUsd = 50
+seed = 123456789
+```
+
+## `[network]`
+
+```toml
+[network]
+rpc_url = "https://evm-rpc-testnet.sei-apis.com"
+chain_id = 1328
+```
+
+| Key | Type | Required | Notes |
+|---|---|---|---|
+| `rpc_url` | string | Yes for `live` | RPC endpoint |
+| `chain_id` | number | No | Useful for explicit network targeting |
+
+## `[ai_helper]`
+
+```toml
+[ai_helper]
+enabled = true
+provider = "chatgpt"
+api_key = "replace-me"
+prompt = """
+You are trading assistant.
+Prioritize risk management.
+"""
+```
+
+| Key | Type | Required | Notes |
+|---|---|---|---|
+| `enabled` | boolean | Yes if section present | Turn feature on |
+| `provider` | string | Yes if section present | `gemini`, `chatgpt`, `claude` |
+| `api_key` | string | Yes if section present | Secret key |
+| `prompt` | string | No | Custom system prompt |
+
+## Environment variables
+
+These are not TOML fields, but they affect runtime:
+
+| Variable | Purpose |
+|---|---|
+| `PRIVATE_KEY` | Used by example scripts and demo flows |
+| `SEI_RPC_URL` | Used by the example scripts |
+| `MODE` | Used by `npx mach1 demo` |
+| `MONACO_ENV` | Monaco environment host selection |
+| `MONACO_CLIENT_ID` | Monaco client ID override |
+| `MONACO_RATE_LIMIT_RPS` | Rate limit override |
+| `MONACO_LOG_LEVEL` | Runtime log level override |
+| `MACH_ONE_NO_UI` | Disables terminal UI |
+| `MACH_ONE_SUPERVISED` | Internal flag used by supervisor mode |
+
+## Validation checklist
+
+Before running:
+
+1. `npx mach1 run --config my-bot.toml --dry-run`
+2. `npx mach1 strategy <strategy-id>`
+3. `npx mach1 list-strategies --detailed`

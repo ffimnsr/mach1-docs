@@ -1,0 +1,86 @@
+---
+title: DCA Strategy
+---
+
+Strategy ID: `builtin.dca`
+
+The built-in DCA strategy purchases a pair in fixed slices over time.
+
+## Parameters
+
+| Parameter | Type | Meaning |
+|---|---|---|
+| `pair` | string | Pair to trade, for example `ETH/USDC`. |
+| `totalAmountUsd` | number | Total notional to deploy across all orders. |
+| `intervalMinutes` | number | Delay between executions. |
+| `orderCount` | number | Total number of orders. |
+| `priceStrategy` | string | `market`, `limit`, or `twap`. |
+| `limitPriceOffset` | number | Offset percent for limit entries. |
+| `maxSlippage` | number | Max slippage percentage. |
+| `stopOnMarketClose` | boolean | Pause when market hours are closed. |
+
+## Example config
+
+```toml
+[strategy]
+type = "dca"
+id = "builtin.dca"
+risk_level = "medium"
+trading_pairs = ["ETH/USDC"]
+
+[strategy.parameters]
+pair = "ETH/USDC"
+totalAmountUsd = 1000
+intervalMinutes = 15
+orderCount = 10
+priceStrategy = "market"
+limitPriceOffset = -0.1
+maxSlippage = 0.5
+stopOnMarketClose = false
+```
+
+## Run it
+
+```bash
+npx mach1 run --config dca.toml
+```
+
+## When to use it
+
+- averaging into a position
+- reducing timing risk
+- simple recurring accumulation
+
+## What to watch for
+
+- too-short intervals collapse the benefit of averaging
+- too-small `orderCount` makes each slice too large
+- missing market data delays execution
+
+See also [Strategy tuning](/mach1-bot/strategies/tuning).
+
+## Variations
+
+### Faster simulation loop
+
+```toml
+[strategy.parameters]
+pair = "ETH/USDC"
+totalAmountUsd = 500
+intervalMinutes = 1
+orderCount = 20
+priceStrategy = "market"
+```
+
+### Limit-based DCA
+
+```toml
+[strategy.parameters]
+pair = "ETH/USDC"
+totalAmountUsd = 1000
+intervalMinutes = 15
+orderCount = 10
+priceStrategy = "limit"
+limitPriceOffset = -0.25
+maxSlippage = 0.5
+```
